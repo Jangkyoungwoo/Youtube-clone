@@ -10,3 +10,4 @@ videosRouter.get("/:id(\\d+)/edit", edit);
 videosRouter.get("/:id(\\d+)/remove", remove);
 
 export default videosRouter;
+
