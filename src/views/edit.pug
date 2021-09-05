@@ -1,3 +1,7 @@
 extends base.pug
 block content 
   h1 Edit your profile!
+
+  form(method="POST")
+    input(name="title",placeholder="Edit your title",value=video.title)
+    input(type="submit",value="save")
