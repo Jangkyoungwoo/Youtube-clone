@@ -7,7 +7,7 @@
     "url": "git+https://github.com/Jangkyoungwoo/Youtube-clone.git"
   },
   "scripts": {
-    "dev": "nodemon --exec babel-node src/server.js"
+    "dev": "nodemon --exec babel-node src/init.js"
   },
   "keywords": [
     "cloneCoding"
@@ -20,6 +20,7 @@
   "homepage": "https://github.com/Jangkyoungwoo/Youtube-clone#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "mongoose": "^6.0.5",
     "morgan": "^1.10.0",
     "pug": "^3.0.2"
   },

@@ -1,56 +1,41 @@
-let videos = [
-  {
-    title: "FirstVideo",
-    rating: 5,
-    comments: 2,
-    createdAt: "2 minutes ago",
-    views: 59,
-    id: 1
-  },
-  {
-    title: "secondVideo",
-    rating: 5,
-    comments: 2,
-    createdAt: "2 minutes ago",
-    views: 59,
-    id: 2
-  },
-  {
-    title: "thirdVideo",
-    rating: 5,
-    comments: 2,
-    createdAt: "2 minutes ago",
-    views: 59,
-    id: 3
-  },
-  {
-    title: "FourthVideo",
-    rating: 5,
-    comments: 2,
-    createdAt: "2 minutes ago",
-    views: 59,
-    id: 4
-  },
-];
+import Video from "../models/Video";
+
+/*Video.find({}, (error, videos) => {
+  console.log("errors", error);
+  console.log("videos", videos);
+  return res.render("home", { titleContent: "home", videos: [] })
+});*/
+
+export const home = async (req, res) => {
+  try {
+    console.log("start");
+    const videos = await Video.find({});
+    console.log("finish");
+    return res.render("home", { titleContent: "home", videos })
+  }
+  catch (error) {
+    return res.render("server-error", { error });
+  }
+};
 export const search = (req, res) => { res.send("search") };
 export const watch = (req, res) => {
   const { id } = req.params;
-  console.log(id);
-  const video = videos[id - 1];
-  return res.render("watch", { titleContent: `Watching a ${video.title}`, video }
+  return res.render("watch", { titleContent: `Watching` }
   );
 };
 export const getEdit = (req, res) => {
   const { id } = req.params;
-  const video = videos[id - 1];
-  return res.render("edit", { titleContent: `Editing ${video.title}`, video })
+  return res.render("edit", { titleContent: `Editing` })
 };
 export const postEdit = (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
-  videos[id - 1].title = title;
   return res.redirect(`/videos/${id}`);
 };
-export const remove = (req, res) => { res.send("this is a remove page in videosRouter") };
-export const upload = (req, res) => { res.send("this is a upload page in videosRouter") };
-export const commants = (req, res) => { res.send("this is a commats page in videosRouter") };
+export const getUpload = (req, res) => {
+  return res.render("upload", { titleContent: `Upload your video!` });
+};
+export const postUpload = (req, res) => {
+  const { newTitle } = req.body;
+  return res.redirect("/");
+};

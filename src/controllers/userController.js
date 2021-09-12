@@ -32,9 +32,6 @@ let videos = [
     id: 4
   },
 ];
-export const home = (req, res) => {
-  res.render("home", { titleContent: "home", videos })
-};
 export const login = (req, res) => { res.send("login") };
 export const join = (req, res) => { res.send("join") };
 export const user = (req, res) => {
