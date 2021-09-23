@@ -3,5 +3,7 @@ block content
   h1 Edit your profile!
 
   form(method="POST")
-    input(name="title",placeholder="Edit your title",value=video.title)
-    input(type="submit",value="save")
+    input(type="text", name="title", placeholder="Video Title", value=video.title, required )
+    input(type="text", name="description", placeholder="Video description", value=video.description, required )
+    input(type="text", name="hashtags", placeholder="Video Thashtagsitle", value=video.hashtags.join(), required )
+    input(type="submit", value="save")

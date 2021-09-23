@@ -4,8 +4,14 @@ html(lang="kr")
     link(rel="stylesheet" href="https://unpkg.com/mvp.css")
     title #{titleContent} | youtube
   body 
-  header 
-    h1=titleContent
-  main
-    block content
+    header 
+      h1=titleContent
+      nav
+        ul 
+          li 
+            a(href="/videos/upload") Update Video
+          li 
+            a(href="/") Home
+    main
+      block content
   include partials/footer.pug
