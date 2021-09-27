@@ -1,10 +1,5 @@
 import Video from "../models/Video";
-
-/*Video.find({}, (error, videos) => {
-  console.log("errors", error);
-  console.log("videos", videos);
-  return res.render("home", { titleContent: "home", videos: [] })
-});*/
+//import { formatHashtags } from '../models/Video';
 
 export const home = async (req, res) => {
   const videos = await Video.find({});
@@ -37,7 +32,7 @@ export const postEdit = async (req, res) => {
   await Video.findByIdAndUpdate(id, {
     title,
     description,
-    hashtags: hashtags.split(",").map(word => (word.startsWith('#') ? word : `#${word}`))
+    hashtags: Video.formatHashtags(hashtags)
   });
   return res.redirect(`/videos/${id}`);
 
@@ -46,16 +41,19 @@ export const getUpload = (req, res) => {
   return res.render("upload", { titleContent: `Upload your video!` });
 };
 export const postUpload = async (req, res) => {
-  const { newTitle, newDescription, newHashtags } = req.body;
+  const { title, description, hashtags } = req.body;
   try {
     await Video.create({
-      title: newTitle,
-      description: newDescription,
-      hashtags: newHashtags.split(",").map(word => `#${word}`),
+      title,
+      description,
+      hashtags: Video.formatHashtags(hashtags),
     })
     return res.redirect("/");
   }
   catch (error) {
-    return res.render("upload", { titleContent: `Upload your video!`, errorMessage: error._message });
+    return res.render("upload", {
+      titleContent: `Upload your video!`,
+      errorMessage: error._message
+    });
   }
 };
