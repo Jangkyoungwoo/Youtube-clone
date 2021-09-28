@@ -1,11 +1,15 @@
+import { query } from 'express';
 import Video from "../models/Video";
 //import { formatHashtags } from '../models/Video';
 
 export const home = async (req, res) => {
-  const videos = await Video.find({});
+  const videos = await Video.find({}).sort({ createdAt: "asc" });
   return res.render("home", { titleContent: "home", videos })
 };
-export const search = (req, res) => { res.send("search") };
+export const searchVideo = (req, res) => {
+  console.log(req, query);
+  return res.render("search", { titleContent: "Search" });
+};
 export const watch = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id);
@@ -56,4 +60,10 @@ export const postUpload = async (req, res) => {
       errorMessage: error._message
     });
   }
+};
+export const deleteVideo = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  await Video.findByIdAndDelete({ _id: id });
+  res.redirect("/");
 };
