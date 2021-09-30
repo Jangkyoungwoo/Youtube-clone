@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/Jangkyoungwoo/Youtube-clone#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
     "mongoose": "^6.0.5",
     "morgan": "^1.10.0",

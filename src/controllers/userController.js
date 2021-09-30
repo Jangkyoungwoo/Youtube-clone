@@ -1,43 +1,17 @@
-let videos = [
-  {
-    title: "FirstVideo",
-    rating: 5,
-    comments: 2,
-    createdAt: "2 minutes ago",
-    views: 59,
-    id: 1
-  },
-  {
-    title: "secondVideo",
-    rating: 5,
-    comments: 2,
-    createdAt: "2 minutes ago",
-    views: 59,
-    id: 2
-  },
-  {
-    title: "thirdVideo",
-    rating: 5,
-    comments: 2,
-    createdAt: "2 minutes ago",
-    views: 59,
-    id: 3
-  },
-  {
-    title: "FourthVideo",
-    rating: 5,
-    comments: 2,
-    createdAt: "2 minutes ago",
-    views: 59,
-    id: 4
-  },
-];
-export const login = (req, res) => { res.send("login") };
-export const join = (req, res) => { res.send("join") };
-export const user = (req, res) => {
-  console.log(req.params.id);
-  return res.send(`user id#${req.params.id}`)
+import User from "../models/User";
+
+export const getJoin = (req, res) => {
+  res.render("createAccount", { titleContent: "Create Account" })
 };
+export const postJoin = async (req, res) => {
+  const { email, userName, password, name, location } = req.body;
+  const user = await User.create({
+    email, userName, password, name, location
+  });
+
+  return res.redirect("/login");
+}
+export const login = (req, res) => { res.send("login") };
 export const logout = (req, res) => { res.send("this is a logout page in userRouter") };
 export const edit = (req, res) => { res.render("edit", { titleContent: "edit" }) };
 export const remove = (req, res) => { res.send("this is a remove page in userRouter") };

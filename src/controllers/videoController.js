@@ -6,9 +6,17 @@ export const home = async (req, res) => {
   const videos = await Video.find({}).sort({ createdAt: "asc" });
   return res.render("home", { titleContent: "home", videos })
 };
-export const searchVideo = (req, res) => {
-  console.log(req, query);
-  return res.render("search", { titleContent: "Search" });
+export const searchVideo = async (req, res) => {
+  const { keyword } = req.query;
+  let videos = [];
+  if (keyword) {
+    videos = await Video.find({
+      title: {
+        $regex: new RegExp(`${keyword}$`, 'i')
+      }
+    })
+  }
+  return res.render("search", { titleContent: "Search", videos });
 };
 export const watch = async (req, res) => {
   const { id } = req.params;
