@@ -1,5 +1,6 @@
 import User from "../models/User";
 import bcrypt from "bcrypt";
+import session from 'express-session';
 
 export const getJoin = (req, res) => {
   res.render("join", { titleContent: "Join" })
@@ -37,6 +38,8 @@ export const postLogin = async (req, res) => {
   if (!confirm) {
     return res.status(400).render("login", { titleContent, errorMessage: "비밀번호가 다릅니다." });
   }
+  req.session.loggedIn = true;
+  req.session.user = user;
   return res.redirect("/");
 };
 export const logout = (req, res) => { res.send("this is a logout page in userRouter") };
