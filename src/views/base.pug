@@ -8,15 +8,20 @@ html(lang="kr")
       h1=titleContent
       nav
         ul 
-          if(!req.session.logedIn)
+          li 
+            a(href="/") Home
+          if loggedIn 
+            li 
+              a(href="/logout") Log out
+            li 
+              a(href="/my-profile") #{loggedInUser.name}의 profile
+          else
             li 
               a(href="/join") Join
             li
               a(href="login") Login
           li 
             a(href="/videos/upload") Update Video
-          li 
-            a(href="/") Home
           li 
             a(href="/search") Search
     main
