@@ -45,3 +45,17 @@ export const postLogin = async (req, res) => {
 export const logout = (req, res) => { res.send("this is a logout page in userRouter") };
 export const edit = (req, res) => { res.render("edit", { titleContent: "edit" }) };
 export const remove = (req, res) => { res.send("this is a remove page in userRouter") };
+export const startGithubLogin = (req, res) => {
+  const baseUrl = "https://github.com/login/oauth/authorize";
+  const config = {
+    client_id: "f4f624c16ce496aab8da",
+    allow_signup: false,
+    scope: "read:user user:email"
+  }
+  const params = new URLSearchParams(config);
+  const finalUrl = `${baseUrl}?${params}`
+  res.redirect(finalUrl);
+};
+export const finishGithubLogin = (res, req) => {
+
+};
