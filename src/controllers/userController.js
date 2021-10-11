@@ -48,14 +48,29 @@ export const remove = (req, res) => { res.send("this is a remove page in userRou
 export const startGithubLogin = (req, res) => {
   const baseUrl = "https://github.com/login/oauth/authorize";
   const config = {
-    client_id: "f4f624c16ce496aab8da",
+    client_id: process.env.GITHUB_CLIENT_ID,
     allow_signup: false,
     scope: "read:user user:email"
   }
-  const params = new URLSearchParams(config);
+  const params = new URLSearchParams(config).toString();
   const finalUrl = `${baseUrl}?${params}`
   res.redirect(finalUrl);
 };
-export const finishGithubLogin = (res, req) => {
-
+export const finishGithubLogin = async (res, req) => {
+  const config = {
+    client_id: process.env.GITHUB_CLIENT_ID,
+    client_secret: process.env.GITHUB_SECRET,
+    code: req.query.code
+  }
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`
+  const data = await fetch(finalUrl
+    , {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      }
+    });
+  const json = await data.json();
+  console.log(json);
 };
