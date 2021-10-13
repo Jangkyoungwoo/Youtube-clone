@@ -1,6 +1,6 @@
 import User from "../models/User";
+import fetch from "node-fetch";
 import bcrypt from "bcrypt";
-import session from 'express-session';
 
 export const getJoin = (req, res) => {
   res.render("join", { titleContent: "Join" })
@@ -42,35 +42,48 @@ export const postLogin = async (req, res) => {
   req.session.user = user;
   return res.redirect("/");
 };
-export const logout = (req, res) => { res.send("this is a logout page in userRouter") };
-export const edit = (req, res) => { res.render("edit", { titleContent: "edit" }) };
-export const remove = (req, res) => { res.send("this is a remove page in userRouter") };
 export const startGithubLogin = (req, res) => {
   const baseUrl = "https://github.com/login/oauth/authorize";
   const config = {
     client_id: process.env.GITHUB_CLIENT_ID,
     allow_signup: false,
     scope: "read:user user:email"
-  }
+  };
   const params = new URLSearchParams(config).toString();
-  const finalUrl = `${baseUrl}?${params}`
-  res.redirect(finalUrl);
+  const finalUrl = `${baseUrl}?${params}`;
+  return res.redirect(finalUrl);
 };
 export const finishGithubLogin = async (res, req) => {
+  const baseUrl = "https://github.com/login/oauth/access_token";
   const config = {
     client_id: process.env.GITHUB_CLIENT_ID,
     client_secret: process.env.GITHUB_SECRET,
-    code: req.query.code
-  }
+    code: req.query,
+  };
   const params = new URLSearchParams(config).toString();
-  const finalUrl = `${baseUrl}?${params}`
-  const data = await fetch(finalUrl
-    , {
+  const finalUrl = `${baseUrl}?${params}`;
+  const tokenRequest = await (
+    await fetch(finalUrl, {
       method: "POST",
       headers: {
         Accept: "application/json",
-      }
-    });
-  const json = await data.json();
-  console.log(json);
+      },
+    })
+  ).json();
+  if ("access_token" in tokenRequest) {
+    const { access_token } = tokenRequest;
+    const userRequest = await (
+      await fetch("https://api.github.com/user", {
+        headers: {
+          Authorization: `token ${access_token}`,
+        },
+      })
+    ).json();
+    console.log(userRequest);
+  } else {
+    return res.redirect("/login");
+  }
 };
+export const logout = (req, res) => { res.send("this is a logout page in userRouter") };
+export const edit = (req, res) => { res.render("edit", { titleContent: "edit" }) };
+export const remove = (req, res) => { res.send("this is a remove page in userRouter") };
