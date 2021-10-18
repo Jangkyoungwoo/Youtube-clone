@@ -30,7 +30,7 @@ export const getLogin = (req, res) => {
 export const postLogin = async (req, res) => {
   const { userName, password } = req.body;
   const titleContent = "Login";
-  const user = await User.findOne({ userName });
+  const user = await User.findOne({ userName, socialOnly: false });
   if (!user) {
     return res.status(400).render("login", { titleContent, errorMessage: "아이디가 다릅니다." });
   }
@@ -114,6 +114,8 @@ export const finishGithubLogin = async (req, res) => {
     return res.redirect("/login");
   }
 };
-export const logout = (req, res) => { res.send("this is a logout page in userRouter") };
+export const logout = (req, res) => {
+  req.session.destroy();
+  return res.redirect("/");
+};
 export const edit = (req, res) => { res.render("edit", { titleContent: "edit" }) };
-export const remove = (req, res) => { res.send("this is a remove page in userRouter") };
