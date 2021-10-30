@@ -118,4 +118,5 @@ export const logout = (req, res) => {
   req.session.destroy();
   return res.redirect("/");
 };
-export const edit = (req, res) => { res.render("edit", { titleContent: "edit" }) };
+export const getEdit = (req, res) => { res.render("edit-profile", { titleContent: "Edit profile" }) };
+export const postEdit = (req, res) => { res.render("edit-profile") };
