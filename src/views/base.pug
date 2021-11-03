@@ -15,15 +15,15 @@ html(lang="kr")
               a(href="/users/logout") Log out
             li 
               a(href="/users/edit") Edit profile
+            li 
+              a(href="/videos/upload") Upload Video
           else
             li 
               a(href="/join") Join
             li
               a(href="login") Login
-          li 
-            a(href="/videos/upload") Update Video
-          li 
-            a(href="/search") Search
+            li 
+              a(href="/search") Search
     main
       block content
   include partials/footer.pug
