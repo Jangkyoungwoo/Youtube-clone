@@ -128,3 +128,23 @@ export const postEdit = async (req, res) => {
   req.session.user = updateUser;
   res.redirect("/users/edit")
 };
+export const getChangePassword = (req, res) => {
+  return res.render("users/change-password", { titleContent: "Change password" });
+}
+export const postChangePassword = async (req, res) => {
+  const {
+    session: { user: { _id } },
+    body: { oldPassword, newPassword, newPassword1 },
+  } = req;
+  const ok = await bcrypt.compare(oldPassword, user.password);
+  if (!ok) {
+    res.status(400).render("users/change-password", { titleContent: "Change password", errorMessage: "비밀번호가 틀립니다" });
+  }
+  if (newPassword !== newPassword1) {
+    res.render("users/change-password", { titleContent: "Change password", errorMessage: "비밀번호가 틀립니다" });
+  }
+
+  user.password = newPassword;
+  await user.save();
+  return res.redirect("/users/logout");
+}
