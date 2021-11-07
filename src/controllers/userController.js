@@ -6,17 +6,17 @@ export const getJoin = (req, res) => {
   res.render("join", { titleContent: "Join" })
 };
 export const postJoin = async (req, res) => {
-  const { email, userName, password, confirmPassword, name, location } = req.body;
-  const exitInfo = await User.exists({ $or: [{ email }, { userName }] });
-  if (exitInfo) {
-    return res.render("join", { titleContent: "Join", errorMessage: "Email and userName is alrady exist" });
-  }
+  const { email, username, password, confirmPassword, name, location } = req.body;
   if (password !== confirmPassword) {
     return res.status(400).render("join", { titleContent: "Create Account", errorMessage: "password confirmation does not match" });
   }
+  const exitInfo = await User.exists({ $or: [{ email }, { username }] });
+  if (exitInfo) {
+    return res.render("join", { titleContent: "Join", errorMessage: "Email and username is alrady exist" });
+  }
   try {
     await User.create({
-      email, userName, password, name, location
+      name, email, username, password, location
     });
     return res.redirect("/login");
   }
@@ -28,9 +28,9 @@ export const getLogin = (req, res) => {
   res.render("login", { titleContent: "Login page" })
 };
 export const postLogin = async (req, res) => {
-  const { userName, password } = req.body;
+  const { username, password } = req.body;
   const titleContent = "Login";
-  const user = await User.findOne({ userName, socialOnly: false });
+  const user = await User.findOne({ username, socialOnly: false });
   if (!user) {
     return res.status(400).render("login", { titleContent, errorMessage: "아이디가 다릅니다." });
   }
@@ -121,10 +121,11 @@ export const logout = (req, res) => {
 export const getEdit = (req, res) => { res.render("edit-profile", { titleContent: "Edit profile" }) };
 export const postEdit = async (req, res) => {
   const {
-    session: { user: { _id } },
+    session: { user: { _id, avatarUrl } },
     body: { name, email, username, location },
+    file,
   } = req;
-  const updateUser = await User.findByIdAndUpdate(_id, { name, email, username, location }, { new: true });
+  const updateUser = await User.findByIdAndUpdate(_id, { avatarUrl: file ? file.path : avatarUrl, name, email, username, location }, { new: true });
   req.session.user = updateUser;
   res.redirect("/users/edit")
 };
@@ -136,6 +137,7 @@ export const postChangePassword = async (req, res) => {
     session: { user: { _id } },
     body: { oldPassword, newPassword, newPassword1 },
   } = req;
+  const user = await User.findById(_id);
   const ok = await bcrypt.compare(oldPassword, user.password);
   if (!ok) {
     res.status(400).render("users/change-password", { titleContent: "Change password", errorMessage: "비밀번호가 틀립니다" });
